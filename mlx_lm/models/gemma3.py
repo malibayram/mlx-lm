@@ -15,9 +15,11 @@ from .base import BaseModelArgs
 class ModelArgs(BaseModelArgs):
     model_type: str
     text_config: dict
-    vocab_size: int = 262208
+    vocab_size: Optional[int] = None
 
     def __post_init__(self):
+        if self.vocab_size is None:
+            self.vocab_size = self.text_config.get("vocab_size", 262208)
         self.text_config["vocab_size"] = self.vocab_size
         self.text_config["num_attention_heads"] = self.text_config.get(
             "num_attention_heads", 8
